@@ -71,7 +71,7 @@ class Lig4:
     def iniciar_jogo(self, nome_jogador1, nome_jogador2):
         self.nome_jogador1 = nome_jogador1
         self.nome_jogador2 = nome_jogador2
-        self.jogador_atual = 'blue'  # Alterei para azul
+        self.jogador_atual = 'blue'
         self.tela_inicial.frame.destroy()
         self.criar_interface_jogo()
 
@@ -92,6 +92,8 @@ class Lig4:
                 self.botoes[i][coluna].atualizar_cor_fundo(self.jogador_atual)
                 if self.verificar_vitoria(i, coluna):
                     self.mostrar_vencedor()
+                elif self.verificar_empate():
+                    self.mostrar_empate()
                 else:
                     self.jogador_atual = 'yellow' if self.jogador_atual == 'blue' else 'blue'
                 break
@@ -106,6 +108,12 @@ class Lig4:
         if self.contar_pecas_na_linha(linha, coluna, -1, 1) >= 4:
             return True
         return False
+
+    def verificar_empate(self):
+        for linha in self.tabuleiro:
+            if '' in linha:
+                return False  # Ainda há espaços vazios, o jogo não está empatado
+        return True  # Não há mais espaços vazios, o jogo está empatado
 
     def contar_pecas_na_linha(self, linha, coluna, incremento_linha, incremento_coluna):
         jogador_atual = self.jogador_atual
@@ -124,6 +132,10 @@ class Lig4:
 
     def mostrar_vencedor(self):
         messagebox.showinfo('Lig4', f'O jogador {self.jogador_atual.capitalize()} ({self.obter_nome_jogador_atual()}) venceu!')
+        self.root.destroy()
+
+    def mostrar_empate(self):
+        messagebox.showinfo('Lig4', 'O jogo terminou em empate!')
         self.root.destroy()
 
     def obter_nome_jogador_atual(self):
