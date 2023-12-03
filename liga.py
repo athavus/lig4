@@ -131,18 +131,26 @@ class Lig4:
         return contador
 
     def mostrar_vencedor(self):
-        messagebox.showinfo('Lig4', f'O jogador {self.jogador_atual.capitalize()} ({self.obter_nome_jogador_atual()}) venceu!')
-        self.root.destroy()
+        mensagem = f'O jogador {self.jogador_atual.capitalize()} venceu!'
+        self.mostrar_mensagem_final(mensagem)
 
     def mostrar_empate(self):
-        messagebox.showinfo('Lig4', 'O jogo terminou em empate!')
-        self.root.destroy()
+        mensagem = 'O jogo terminou em empate!'
+        self.mostrar_mensagem_final(mensagem)
 
-    def obter_nome_jogador_atual(self):
-        if self.jogador_atual == 'blue':
-            return self.nome_jogador1
+    def mostrar_mensagem_final(self, mensagem):
+        resposta = messagebox.askquestion('Lig4', f'{mensagem}\nDeseja jogar outra partida?')
+        if resposta == 'yes':
+            self.reiniciar_jogo()
         else:
-            return self.nome_jogador2
+            self.root.destroy()
+
+    def reiniciar_jogo(self):
+        self.tabuleiro = [['' for _ in range(7)] for _ in range(6)]
+        for linha in self.botoes:
+            for botao in linha:
+                botao.atualizar_cor_fundo('white')
+        self.jogador_atual = 'blue'
 
 # Criar e iniciar o jogo
 jogo = Lig4()
